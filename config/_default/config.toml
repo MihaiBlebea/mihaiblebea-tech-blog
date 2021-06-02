@@ -1,4 +1,3 @@
-baseURL = "http://example.org/" # The URL of your site.
 title = "Hugo Zzo Theme" # Title of your site
 theme = "zzo" # Name of Zzo theme folder in `themes/`.
 
