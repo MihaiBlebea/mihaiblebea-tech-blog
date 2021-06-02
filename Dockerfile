@@ -21,8 +21,6 @@ RUN hugo
 # Run container
 FROM nginx AS run
 
-ENV HUGO_BASEURL ${BASE_URL}
-
 COPY nginx.conf /etc/nginx/nginx.conf
 
 WORKDIR /app
