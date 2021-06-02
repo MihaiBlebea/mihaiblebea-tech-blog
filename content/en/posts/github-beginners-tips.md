@@ -3,7 +3,7 @@ title: "Github for absolute beginners - How to get started with your first repo?
 date: 2019-03-26T08:47:11+01:00
 description: If you just started to code, then git is not for you... That is what they told me. But does it still apply today?
 draft: false
-image: "https://portswigger.net/cms/images/54/14/6efb9bc5d143-article-190612-github-body-text.jpg"
+image: "images/github-beginners-tips/feature.jpeg"
 tags: ["github", "repo", "coding", "devops"]
 author: Mihai Blebea
 authorEmoji: 🤖

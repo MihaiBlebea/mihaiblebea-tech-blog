@@ -3,7 +3,7 @@ title: "How to structure your next GO project using multiple terminal commands"
 date: 2019-03-26T08:47:11+01:00
 description: Bootstrap you Go application and add extra entry points in the same time shoul not be so complicated. Let's explore this pattern.
 draft: false
-image: "https://i0.wp.com/theencarta.com/wp-content/uploads/2018/12/cmd-tips.jpeg"
+image: "images/go-project-structure/feature.jpeg"
 tags: ["go", "project structure", "terminal"]
 author: Mihai Blebea
 authorEmoji: 🤖

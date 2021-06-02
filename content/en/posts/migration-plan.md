@@ -3,7 +3,7 @@ title: "How to effortlessly migrate your code with this 8 step proven plan"
 date: 2019-03-26T08:47:11+01:00
 description: As time passes, new frameworks appear, older versions are put to rest and the tech environment is shifting and becoming better, faster and more reliable. What do you do?
 draft: false
-image: "https://www.scienceabc.com/wp-content/uploads/2015/04/shutterstock_317822987.jpg"
+image: "images/migration-plan/feature.jpeg"
 tags: ["migration", "refactor", "plan"]
 author: Mihai Blebea
 authorEmoji: 🤖

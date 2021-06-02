@@ -3,7 +3,7 @@ title: "How to build infrastructure with code, using Terraform with Kubernetes"
 date: 2019-03-26T08:47:11+01:00
 description: What is this infrastructure as code all about? If you ever had to deal with infrastructure built by somebody else and passed onto you without documentation, then this article is for you.
 draft: false
-image: "https://www.terraform.io/assets/images/og-image-large-e60c82fe.png"
+image: "images/terraform-deploy-plan/feature.png"
 tags: ["terraform", "kubernetes", "infrastructure", "devops"]
 author: Mihai Blebea
 authorEmoji: 🤖

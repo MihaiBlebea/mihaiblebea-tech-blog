@@ -3,7 +3,7 @@ title: "Build a Go Quiz Game with concurrent jobs from scratch in 6 easy steps"
 date: 2019-03-26T08:47:11+01:00
 description: Coding a game that involves concurrency must be sooooo complicated... right? Not really! It is quite easy by using Go routines system. Let me show you how to do it.
 draft: false
-image: "https://www.sbs.com.au/guide/sites/sbs.com.au.guide/files/styles/full/public/8-out-of-10-cats.jpg"
+image: "images/go-concurrent-quiz-game/feature.png"
 tags: ["golang", "game", "goroutine", "go"]
 author: Mihai Blebea
 authorEmoji: 🤖
