@@ -7,6 +7,7 @@ image: "images/github-beginners-tips/feature.jpeg"
 tags: ["github", "repo", "coding", "devops"]
 author: Mihai Blebea
 authorEmoji: 🤖
+authorImage: images/mihai-profile.jpeg
 ---
 
 {{< featuredImage alt="featured image" >}}

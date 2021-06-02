@@ -7,6 +7,7 @@ image: "images/go-project-structure/feature.jpeg"
 tags: ["go", "project structure", "terminal"]
 author: Mihai Blebea
 authorEmoji: 🤖
+authorImage: images/mihai-profile.jpeg
 ---
 
 {{< featuredImage alt="featured image" >}}

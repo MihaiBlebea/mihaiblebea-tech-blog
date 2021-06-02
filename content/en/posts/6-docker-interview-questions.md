@@ -4,9 +4,13 @@ subtitle: Prove that you are the real deal
 date: 2019-03-26T08:47:11+01:00
 description: So you managed to get past the technical take home exercise... Congrats! You deserve it. Now what's next?
 draft: false
-image: "images/banana-background.jpg"
+image: images/banana-background.jpg
+slug: best-docker-interview-questions
+keywords: ["docker", "interview", "tech-interview"]
+tags: ["docker", "interview", "tech-interview"]
 author: Mihai Blebea
 authorEmoji: 🤖
+authorImage: images/mihai-profile.jpeg
 ---
 
 {{< featuredImage alt="featured image" >}}

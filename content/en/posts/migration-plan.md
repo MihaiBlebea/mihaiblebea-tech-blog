@@ -7,6 +7,7 @@ image: "images/migration-plan/feature.jpeg"
 tags: ["migration", "refactor", "plan"]
 author: Mihai Blebea
 authorEmoji: 🤖
+authorImage: images/mihai-profile.jpeg
 ---
 
 {{< featuredImage alt="featured image" >}}

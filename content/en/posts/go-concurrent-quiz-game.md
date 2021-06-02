@@ -7,6 +7,7 @@ image: "images/go-concurrent-quiz-game/feature.png"
 tags: ["golang", "game", "goroutine", "go"]
 author: Mihai Blebea
 authorEmoji: 🤖
+authorImage: images/mihai-profile.jpeg
 ---
 
 {{< featuredImage alt="featured image" >}}

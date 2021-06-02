@@ -6,6 +6,7 @@ draft: true
 image: "images/banana-background.jpg"
 author: Mihai Blebea
 authorEmoji: 🤖
+authorImage: images/mihai-profile.jpeg
 ---
 
 {{< featuredImage alt="featured image" >}}
