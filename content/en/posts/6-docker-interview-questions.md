@@ -8,9 +8,6 @@ image: images/banana-background.jpg
 slug: best-docker-interview-questions
 keywords: ["docker", "interview", "tech-interview"]
 tags: ["docker", "interview", "tech-interview"]
-author: Mihai Blebea
-authorEmoji: 🤖
-authorImage: images/mihai-profile.jpeg
 ---
 
 {{< featuredImage alt="featured image" >}}

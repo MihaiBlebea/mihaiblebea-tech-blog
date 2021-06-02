@@ -5,9 +5,6 @@ description: As time passes, new frameworks appear, older versions are put to re
 draft: false
 image: "images/migration-plan/feature.jpeg"
 tags: ["migration", "refactor", "plan"]
-author: Mihai Blebea
-authorEmoji: 🤖
-authorImage: images/mihai-profile.jpeg
 ---
 
 {{< featuredImage alt="featured image" >}}

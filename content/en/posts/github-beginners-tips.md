@@ -5,9 +5,6 @@ description: If you just started to code, then git is not for you... That is wha
 draft: false
 image: "images/github-beginners-tips/feature.jpeg"
 tags: ["github", "repo", "coding", "devops"]
-author: Mihai Blebea
-authorEmoji: 🤖
-authorImage: images/mihai-profile.jpeg
 ---
 
 {{< featuredImage alt="featured image" >}}

@@ -5,9 +5,6 @@ description: Coding a game that involves concurrency must be sooooo complicated.
 draft: false
 image: "images/go-concurrent-quiz-game/feature.png"
 tags: ["golang", "game", "goroutine", "go"]
-author: Mihai Blebea
-authorEmoji: 🤖
-authorImage: images/mihai-profile.jpeg
 ---
 
 {{< featuredImage alt="featured image" >}}

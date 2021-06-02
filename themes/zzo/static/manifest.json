@@ -7,7 +7,7 @@
   "description": "A plain text description",
   "icons": [
     {
-      "src": "favicon.png",
+      "src": "banana-logo.png",
       "sizes": "16x16",
       "type": "image/png"
     }, {
@@ -27,7 +27,7 @@
   "background": {
     "persistent": false
   },
-  "start_url": "https://exampleSite.com/",
+  "start_url": "https://mihaiblebea.com/",
   "theme_color": "#fff",
   "background_color": "#fff",
   "display": "standalone"

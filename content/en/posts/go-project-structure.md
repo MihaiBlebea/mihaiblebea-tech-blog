@@ -5,9 +5,6 @@ description: Bootstrap you Go application and add extra entry points in the same
 draft: false
 image: "images/go-project-structure/feature.jpeg"
 tags: ["go", "project structure", "terminal"]
-author: Mihai Blebea
-authorEmoji: 🤖
-authorImage: images/mihai-profile.jpeg
 ---
 
 {{< featuredImage alt="featured image" >}}

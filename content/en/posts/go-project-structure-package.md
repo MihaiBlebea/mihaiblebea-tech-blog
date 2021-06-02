@@ -4,9 +4,6 @@ date: 2022-03-26T08:47:11+01:00
 description: So you managed to get past the technical take home exercise... Congrats! You deserve it. Now what's next?
 draft: true
 image: "images/banana-background.jpg"
-author: Mihai Blebea
-authorEmoji: 🤖
-authorImage: images/mihai-profile.jpeg
 ---
 
 {{< featuredImage alt="featured image" >}}

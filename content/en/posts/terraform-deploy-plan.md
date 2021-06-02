@@ -5,9 +5,6 @@ description: What is this infrastructure as code all about? If you ever had to d
 draft: false
 image: "images/terraform-deploy-plan/feature.png"
 tags: ["terraform", "kubernetes", "infrastructure", "devops"]
-author: Mihai Blebea
-authorEmoji: 🤖
-authorImage: images/mihai-profile.jpeg
 ---
 
 {{< featuredImage alt="featured image" >}}
