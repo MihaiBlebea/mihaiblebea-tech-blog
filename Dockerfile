@@ -21,7 +21,7 @@ RUN hugo
 # Run container
 FROM nginx AS run
 
-ENV HUGO_BASEURL http://localhost:8081/
+ENV HUGO_BASEURL ${BASE_URL}
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
@@ -31,4 +31,4 @@ VOLUME [ "/var/log/nginx" ]
 
 COPY --from=build_base ./tmp/public .
 
-EXPOSE 80
+EXPOSE ${HTTP_PORT}

@@ -9,6 +9,7 @@ build:
 
 run:
 	docker run \
+		--env-file ./.env \
 		-d \
 		--name mihaiblebea-tech \
 		-p 8081:80 \
