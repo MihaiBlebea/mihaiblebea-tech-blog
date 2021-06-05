@@ -4,6 +4,8 @@
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    background-blend-mode: hard-light;
+    background-color: blue;
 }
 
 .summary-card__image-wrapper {

@@ -1,4 +1,5 @@
-title = "Hugo Zzo Theme" # Title of your site
+baseURL = "https://mihaiblebea.com"
+title = "Mihai Blebea" # Title of your site
 theme = "zzo" # Name of Zzo theme folder in `themes/`.
 
 defaultContentLanguage = "en" # Default language to use (if you setup multilingual)

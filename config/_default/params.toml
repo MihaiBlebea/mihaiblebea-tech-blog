@@ -188,12 +188,14 @@ commento = false
   copyrightLinkImage = ""
   copyrightLinkText = ""
 
-# possible share name: "facebook","twitter", "reddit", "linkedin", "tumblr", "weibo", "douban", "line", "whatsapp", "telegram"
+# possible share name: "facebook", "twitter", "reddit", "linkedin", "tumblr", "weibo", "douban", "line", "whatsapp", "telegram"
 [[share]]
   name = "facebook"
 [[share]]
   name = "twitter"
   username = ""
+[[share]]
+  name = "linkedin"
 
 [[footerLinks]]
   name = ""
