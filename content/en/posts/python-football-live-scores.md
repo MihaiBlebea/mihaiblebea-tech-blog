@@ -1,0 +1,364 @@
+---
+title: "How to build a football live scores notification app with Python?"
+date: 2021-12-07T14:47:11+01:00
+description: Ever wanted to get the latest football scores on your laptop? I found a great API to get data in real time, follow me while I build this app from scratch.
+draft: false
+image: "images/python-football-live-scores/feature.jpg"
+tags: ["python", "rapidapi", "football"]
+---
+
+{{< featuredImage alt="featured image" >}}
+
+If you are like me, you must spend a lot of time coding...
+
+I would actually like to spend more time watching sports or going outside and play football. But hey... we are developers and that keeps us busy during the weekends.
+
+But you don't have to chose one or the other, now you can enjoy them both.
+
+In this article I will walk you through the steps necesary to build a real time football score notification system.
+
+This will most likely work better on Linux OS, but you can easily adapt this for Windows or MacOS.
+
+## What is the biggest problem we have to overcome?
+
+To be completely honest with you, this is not my first stab at building this, but I always found myself stuck when I tried to get the real time football scores.
+
+We have a couple of options to overcome this:
+
+- scrape the real scores from Google
+
+- follow a Twitter stream and get the scores in real time
+
+- use a FREE API that provides us the scores without any fuss
+
+Hmmm, hard decissions... but let's go with the last option as it's the most conveniant and easy to implement.
+
+Why would we spend weeks trying to build a scraper, or deal with the Google algoritm built to block us from scraping it's results.
+
+To solve this issue, just use this FREE API that I found on RapidAPI called [Football Live Score](https://bit.ly/3oEBIyl).
+
+All you need to do is just [create a FREE account](https://bit.ly/3oEBIyl) and they will provide you with a token that you can use to access any API on their platform.
+
+The Football Live Score API provides 2 endpoints at the moment, but if you read this in the "future" you may see more as this is a well supported comunity.
+
+They currently support:
+
+- GET `/matches` which provides a list of matches for the day with live updates, just keep in mind you will receive matches that are not in progress
+
+- GET `/matches/updates` contains the same games but filtered by latest updates, we are going to use this one as it provides only the matches that changed score from the last query, so we don't need to handle that complexity or store the matches on our side
+
+- GET `/leagues`provides the matches for today but sorted by league
+
+The platform in itself is quite cool as it allows you to test the API right on their website before including it in your application.
+
+[Check it out here!](https://bit.ly/3oEBIyl)
+
+## What programming language will we use?
+
+My first choice would be Golang, but recently I've spent a lot of time playing around with Python and ... WOW... it just works.
+
+There are so many good libraries in Python which makes it the best choice for a quick project like our football live scores notifier.
+
+We should start by checking your local Python version, so just run this command in the terminal:
+
+```bash
+python3 --version
+
+// Mine returns Python 3.10.0 so that is good enouth
+```
+If your have an older version, it would be better to update your Python to at least 3.9.0.
+
+## Create the project structure
+
+Let's start by creating our folder structure.
+
+```
+|-- football_updates
+	|-- execute.sh
+	|-- src
+		|-- poll.py
+		|-- installer.py
+		|-- notify.py
+	|-- assets
+		|-- alarm.wav
+		|-- icon.png
+```
+This is all that we need for now.
+
+Let's get our hands dirty and start coding it.
+
+To make sure we have all our dependencies for our project and not pollute the global scope, we will need to create a virtual environment for our script.
+
+Navigate inside your main foot folder, in my case it's `/football_updates` and run this:
+
+```bash
+python3 -m venv virtualenv
+```
+This will create a virtual env in a folder called `virtualenv`. Of course you cna change this by providing a different last param to the command above.
+
+Now let's install our dependencies.
+
+We will need:
+
+- crontab // for interacting with crontab and making our lives a bit easier when installing the script
+- notifypy // fot triggering linux gnome notifications
+- requests
+- python-dotenv // for managing the envs
+
+To install all these just run:
+
+```bash
+source ./virtualenv/bin/activate && ./virtualenv/bin/pip3 install crontab notifypy requests python-dotenv && deactivate
+```
+Cool, now we should be all set to start building our script.
+
+### Create the notifications script
+
+This will mostly work for Linux and the Gnome distribution but you can replace this with:
+
+- sending a notification on Telegram
+- posting an update on Twitter
+- sending an email or SMS
+
+For simplicity I will just trigger the updates as a Linux notification.
+
+Navigate to the `/src` folder and create a file called `notify.py` that should look like this:
+
+./src/notify.py
+```python
+from notifypy import Notify
+import pathlib
+
+# Get the base path to our folder so we can trigger this from the crontab without path conflicts
+FOLDER_PATH = pathlib.Path(__file__).parent.resolve()
+
+# Lock down the path to our static resources
+AUDIO_FILE = f"{FOLDER_PATH}/../assets/alarm.wav"
+ICON_FILE = f"{FOLDER_PATH}/../assets/icon.png"
+
+# Main method for our script
+def trigger(title: str, body: str):
+	notification = Notify()
+	notification.title = title
+	notification.message = body
+	notification.application_name = "Football updates" # Change this to suit your needs
+	notification.audio = AUDIO_FILE
+	notification.icon = ICON_FILE
+	notification.send()
+
+# Add this to be able to trigger this as an executable script. Mainly for testing
+if __name__ == "__main__":
+	trigger("demo title", "demo body")
+```
+Oki, now it's time to test this.
+
+You can simply run:
+
+```bash
+python3 ./src/notify.py
+```
+But you would get an error complaining that the notifypy module cannot be found in our dependencies. We were so close ...
+
+But don't worry, this is expected.
+
+The issue is that we are trying to call our script using the default local python interpreter who doesn't know about our virtual environment dependencies and modules.
+
+To make this work we need to use the interpreter from the virtual env.
+
+Let's create a simple `execute.sh` script in our root folder that will allow us to call any script with the virtual env interpreter.
+
+./execute.sh
+```bash
+#!/bin/bash
+
+export PYTHONDONTWRITEBYTECODE=1 # Add this to not create a __pycache__ folder
+export PYTHONPATH="${PYTHONPATH}:${PWD}" # Add our path to the PYTHONPATH, you can skip this
+eval "./virtualenv/bin/python3 src/${1}.py ${@:2}"
+```
+Notice the path we are using to call our Python interpreter `./virtualenv/bin/python3`. This is the one from the virtual env.
+
+Next we pass our file and the rest of the terminal arguments, but omitting the name of the file.
+
+To test our notify script, we need to make our `execute.sh` script exectable by doing:
+
+```bash
+chmod +x ./execute.sh
+```
+Now you can run this and get a demo notification:
+
+```bash
+./execute.sh notify
+```
+
+Did you get the notification? You should now see the popup.
+
+Don't forget to add the `./assets/alarm.wav` and `./assets/icon.png` to make it look and sound like a real notification.
+
+This step is done, let's move to the next one.
+
+## Creating the brains of the script
+
+It's time to get down to business and write the brains of our script.
+
+Just create a `./src/poll.py` file and add this:
+
+./src/poll.py
+```python
+import requests
+from notify import trigger # Notice this is our module, not the notifypy
+import json
+from dotenv import dotenv_values
+
+# Base url of our RapidAPI
+BASE_URL = "https://football-live-scores3.p.rapidapi.com"
+
+def main():
+	# Get all the match updates from the API, loop over them and call the send_notification function on each
+	[send_notification(match) for match in match_generator(get_matches)]
+
+# Add your RapidAPI key to the headers
+def get_headers() -> dict:
+	return {
+		"x-rapidapi-host": "football-live-scores3.p.rapidapi.com",
+		"x-rapidapi-key": "<YOUR_RAPIDAPI_KEY>" # add your private token that you receive form RapidAPI
+	}
+
+# Get all the matches updates and deal with the status codes
+def get_matches() -> list:
+	url = f"{BASE_URL}/matches/updates"
+	res = requests.get(url,  headers=get_headers(), auth=get_auth())
+	if res.status_code != 200:
+		return []
+
+	body = res.json()
+
+	if "data" not in body:
+		return []
+
+	return body["data"]
+
+# Write a simple generator that accepts the source as a callable function to retrieve the matches
+def match_generator(source) -> dict:
+	for match in source():
+		yield {
+			"home_team": match["teams"][0],
+			"away_team": match["teams"][1],
+			"home_score": match["score"][0],
+			"away_score": match["score"][1]
+		}
+
+# Call send_notifications with the match from the API and parse it to compose the notification
+def send_notification(data: dict):
+	home_team = data["home_team"]
+	away_team = data["away_team"]
+	home_score = data["home_score"]
+	away_score = data["away_score"]
+	logging.info(f"Found match update {home_team} {home_score}-{away_score} {away_team}")
+	trigger(
+		f"Update {home_team} - {away_team}",
+		f"{home_team} {home_score}-{away_score} {away_team}"
+	)
+
+# Add this to be able to call the script from the crontab
+if __name__ == "__main__":
+	main()
+```
+
+You can now test the above by running:
+```bash
+./execute.sh poll
+```
+
+You may get none, one or many notifications based on your current date and time, or if there is any match in progress.
+
+It's also up to the players to score a goal in the same time that you are testing this, so not much you can do from your side at this point...
+
+Let's move to the next step and add the poll script to our crontab.
+
+## Make our script easier to install on local laptop
+
+To make our lives easier, let's just encapsulate the logic of installing and removing the script in one single file.
+
+Just create a `./src/install.py` and add this to it:
+
+./src/install.py
+```python
+from crontab import CronTab
+import getpass
+import pathlib
+import argparse
+
+# Add a comment so you know what this does in the future. This will be added to the crontab entry
+# Also it will allow us to find and remove the entry in the future.
+COMMENT = "will run the football updates scraper"
+
+def main(cron):
+	iter = cron.find_comment(COMMENT)
+	for job in iter:
+		if job.comment == COMMENT:
+			remove(cron)
+
+	install(cron)
+
+def install(cron):
+	# Get the path to our root folder
+	path = pathlib.Path(__file__).parent.resolve()
+	# This is the command that we want to run ever 5 minutes to get updates from the API
+	# You can alter this to get more frequent updates
+	# Notice that we send the crontab logs to our root folder in the cron.log file
+	job = cron.new(
+		command=f"{path}/../virtualenv/bin/python3 {path}/poll.py >> {path}/../cron.log 2>&1",
+		comment=COMMENT
+	)
+	job.minute.every(5)
+	cron.write()
+
+def remove(cron):
+	cron.remove_all(comment=COMMENT)
+	cron.write()
+
+if __name__ == "__main__":
+	# Use the argparse lib to easy pass a flag to our script
+	# If we call the script without any arguments, it will create an entry in the crontab
+	# if we call this will a -u flag, it will remove the entry from crontab
+	parser = argparse.ArgumentParser(
+		prog= "installer", 
+		usage="%(prog)s [options]", 
+		description="install the application",
+	)
+
+	parser.add_argument(
+		"-u",
+		"--uninstall",
+		dest="uninstall",
+		required=False, 
+		default=False,
+		action="store_true",
+		help="uninstall the application",
+	)
+
+	args = parser.parse_args()
+
+	cron = CronTab(user=getpass.getuser())
+	# If the flag -u is passed to the script, it will uninstall the crontab entry
+	if args.uninstall:
+		remove(cron)
+	else:
+		main(cron)
+```
+You are all set now. 
+
+To install the football updates notifier, just call this:
+
+```bash
+./execute.sh install
+```
+
+To easily remove it and stop the updates, just call:
+```bash
+./execute.sh install -u
+```
+
+Now all you need to do is wait for somebody to score a goal and you will get a notification with the live score update.
+
+If you want more informations or just read the docs for the [Football Live Scores API](https://bit.ly/3oEBIyl) on RapidAPI just [click here](https://bit.ly/3oEBIyl).
