@@ -19,17 +19,17 @@ In this article I will walk you through the steps necesary to build a real time 
 
 This will most likely work better on Linux OS, but you can easily adapt this for Windows or MacOS.
 
-## What is the biggest problem we have to overcome?
+## What is the biggest problem we will have to overcome?
 
 To be completely honest with you, this is not my first stab at building this, but I always found myself stuck when I tried to get the real time football scores.
 
 We have a couple of options to overcome this:
 
-- scrape the real scores from Google
+- scrape the live scores from Google
 
 - follow a Twitter stream and get the scores in real time
 
-- use a FREE API that provides us the scores without any fuss
+- use a [FREE API](https://bit.ly/3oEBIyl) that provides us the scores without any fuss
 
 Hmmm, hard decissions... but let's go with the last option as it's the most conveniant and easy to implement.
 
@@ -79,6 +79,7 @@ Let's start by creating our folder structure.
 		|-- poll.py
 		|-- installer.py
 		|-- notify.py
+		|-- last_update.py
 	|-- assets
 		|-- alarm.wav
 		|-- icon.png
@@ -112,19 +113,19 @@ source ./virtualenv/bin/activate && ./virtualenv/bin/pip3 install crontab notify
 ```
 Cool, now we should be all set to start building our script.
 
-### Create the notifications script
+## Create the notifications script
 
-This will mostly work for Linux and the Gnome distribution but you can replace this with:
+This will mostly work for Linux and the Gnome distribution but there are some other options:
 
-- sending a notification on Telegram
-- posting an update on Twitter
-- sending an email or SMS
+- send a notification on Telegram
+- post an update on Twitter
+- send an email or SMS
 
-For simplicity I will just trigger the updates as a Linux notification.
+For simplicity I will just trigger the updates as a desktop notification.
 
 Navigate to the `/src` folder and create a file called `notify.py` that should look like this:
 
-./src/notify.py
+*./src/notify.py*
 ```python
 from notifypy import Notify
 import pathlib
@@ -167,7 +168,7 @@ To make this work we need to use the interpreter from the virtual env.
 
 Let's create a simple `execute.sh` script in our root folder that will allow us to call any script with the virtual env interpreter.
 
-./execute.sh
+*./execute.sh*
 ```bash
 #!/bin/bash
 
@@ -196,18 +197,59 @@ Don't forget to add the `./assets/alarm.wav` and `./assets/icon.png` to make it 
 
 This step is done, let's move to the next one.
 
+## Store the last request timestamp
+
+If we use the default endpoint `/matches`, this will return all the live scores in real time.
+
+But we won't know which one was updated from our last request. If you build a website where the live scores are displayed, this will not be an issue, but for this project we just want to get the matches that changed betwen our requests.
+
+To do this, we will call `/matches/updates` and will provide the `last_update` query param that contains the timestamp of the last request.
+
+Navigate in the `src` folder and create the `/last_update.py` file:
+
+*./src/last_update.py*
+```python
+from pathlib import Path
+from datetime import datetime
+
+FOLDER_PATH = Path(__file__).parent.resolve()
+FILE_PATH = f"{FOLDER_PATH}/../last_update.txt" # this is the path to the temp file
+
+# This stores the last update, if none is provided, it will just use the current timestamp
+def store_last_update(last_update: str = None):
+	if last_update is None:
+		last_update = get_current_timestamp()
+	f = open(FILE_PATH, "w")
+	f.write(last_update)
+	f.close()
+
+# This will return the last update as a string from the file
+# If the file does not exist, it will just return the current timestamp
+def get_last_update():
+	if Path(FILE_PATH).is_file() == False:
+		return get_current_timestamp()
+
+	f = open(FILE_PATH, "r")
+	return f.read().strip()
+
+# Just an utility function to return the current timestamp in the same format everytime
+def get_current_timestamp():
+	return str(int(datetime.now().timestamp()))
+```
+
 ## Creating the brains of the script
 
 It's time to get down to business and write the brains of our script.
 
 Just create a `./src/poll.py` file and add this:
 
-./src/poll.py
+*./src/poll.py*
 ```python
 import requests
 from notify import trigger # Notice this is our module, not the notifypy
 import json
 from dotenv import dotenv_values
+from last_update import get_last_update, store_last_update
 
 # Base url of our RapidAPI
 BASE_URL = "https://football-live-scores3.p.rapidapi.com"
@@ -225,12 +267,22 @@ def get_headers() -> dict:
 
 # Get all the matches updates and deal with the status codes
 def get_matches() -> list:
-	url = f"{BASE_URL}/matches/updates"
+	last_update_ts = get_last_update()
+
+	url = f"{BASE_URL}/matches/updates?last_update={last_update_ts}"
 	res = requests.get(url,  headers=get_headers(), auth=get_auth())
+	logging.info(f"Made request to url {url}")
+
 	if res.status_code != 200:
 		return []
 
 	body = res.json()
+
+	if "last_update_timestamp" not in body:
+		# if the key is not in the response for some reason, just use the current timestamp
+		store_last_update()
+	else:
+		store_last_update(body["last_update_timestamp"])
 
 	if "data" not in body:
 		return []
@@ -281,7 +333,7 @@ To make our lives easier, let's just encapsulate the logic of installing and rem
 
 Just create a `./src/install.py` and add this to it:
 
-./src/install.py
+*./src/install.py*
 ```python
 from crontab import CronTab
 import getpass
@@ -362,3 +414,5 @@ To easily remove it and stop the updates, just call:
 Now all you need to do is wait for somebody to score a goal and you will get a notification with the live score update.
 
 If you want more informations or just read the docs for the [Football Live Scores API](https://bit.ly/3oEBIyl) on RapidAPI just [click here](https://bit.ly/3oEBIyl).
+
+If you want to see the full code, just download it from my Github repo: [MihaiBlebea/football_updates](https://github.com/MihaiBlebea/football_updates)
