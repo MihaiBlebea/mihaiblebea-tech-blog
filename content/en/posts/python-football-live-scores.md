@@ -1,7 +1,7 @@
 ---
 title: "How to build a football live scores notification app with Python?"
 date: 2021-12-07T14:47:11+01:00
-description: Ever wanted to get the latest football scores on your laptop? I found a great API to get data in real time, follow me while I build this app from scratch.
+description: Ever wanted to get the latest football scores on your laptop? I found a great API to get data in real-time. Follow me while I build this app from scratch.
 draft: false
 image: "images/python-football-live-scores/feature.jpg"
 tags: ["python", "rapidapi", "football"]
@@ -11,62 +11,62 @@ tags: ["python", "rapidapi", "football"]
 
 If you are like me, you must spend a lot of time coding...
 
-I would actually like to spend more time watching sports or going outside and play football. But hey... we are developers and that keeps us busy during the weekends.
+I would like to spend more time watching sports or going outside to play football. But we are developers and that keeps us busy during the weekends.
 
-But you don't have to chose one or the other, now you can enjoy them both.
+But you don't have to choose one or the other. Now you can enjoy both of them.
 
-In this article I will walk you through the steps necesary to build a real time football score notification system.
+In this article, I will show you the steps necessary to build a real-time football score notification app.
 
-This will most likely work better on Linux OS, but you can easily adapt this for Windows or MacOS.
+This will most likely work better on Linux OS, but you can easily adapt this for Windows or macOS.
 
 ## What is the biggest problem we will have to overcome?
 
-To be completely honest with you, this is not my first stab at building this, but I always found myself stuck when I tried to get the real time football scores.
+To be completely honest with you, this is not my first stab at building this, but I always found myself stuck when I tried to get the real-time football scores.
 
 We have a couple of options to overcome this:
 
 - scrape the live scores from Google
 
-- follow a Twitter stream and get the scores in real time
+- follow a Twitter stream and get the scores in real-time
 
 - use a [FREE API](https://bit.ly/3oEBIyl) that provides us the scores without any fuss
 
-Hmmm, hard decissions... but let's go with the last option as it's the most conveniant and easy to implement.
+Hmmm, hard decisions... but let's go with the last option as it's the most convenient and easy to implement.
 
-Why would we spend weeks trying to build a scraper, or deal with the Google algoritm built to block us from scraping it's results.
+Why would we spend weeks trying to build a scraper? Or deal with the Google algorithm built to block us from scraping the results.
 
 To solve this issue, just use this FREE API that I found on RapidAPI called [Football Live Score](https://bit.ly/3oEBIyl).
 
 All you need to do is just [create a FREE account](https://bit.ly/3oEBIyl) and they will provide you with a token that you can use to access any API on their platform.
 
-The Football Live Score API provides 2 endpoints at the moment, but if you read this in the "future" you may see more as this is a well supported comunity.
+The Football Live Score API provides three endpoints at the moment, but if you read this in the "future" you may see more as this is a well-supported community.
 
 They currently support:
 
-- GET `/matches` which provides a list of matches for the day with live updates, just keep in mind you will receive matches that are not in progress
+- GET `/matches` which provides a list of matches for the day with live updates just keep in mind you will receive matches that are not in progress
 
-- GET `/matches/updates` contains the same games but filtered by latest updates, we are going to use this one as it provides only the matches that changed score from the last query, so we don't need to handle that complexity or store the matches on our side
+- GET `/matches/updates` contains the same games but they are filtered by latest updates. We are going to use this one as it provides only the matches that changed scores from the last query, so we don't need to handle that complexity or store the matches on our side
 
-- GET `/leagues`provides the matches for today but sorted by league
+- GET `/leagues` provides the matches for today but sorted by league
 
-The platform in itself is quite cool as it allows you to test the API right on their website before including it in your application.
+The platform in itself is very good as it allows you to test the API right on their website before including it in your application.
 
 [Check it out here!](https://bit.ly/3oEBIyl)
 
 ## What programming language will we use?
 
-My first choice would be Golang, but recently I've spent a lot of time playing around with Python and ... WOW... it just works.
+My first choice would be Golang, but recently I've spent a lot of time playing around with Python and... WOW... it just works.
 
-There are so many good libraries in Python which makes it the best choice for a quick project like our football live scores notifier.
+There are so many good libraries in Python that make it the best choice for a quick project like our football live scores notifier.
 
 We should start by checking your local Python version, so just run this command in the terminal:
 
 ```bash
 python3 --version
 
-// Mine returns Python 3.10.0 so that is good enouth
+// Mine returns Python 3.10.0 and that is good for now
 ```
-If your have an older version, it would be better to update your Python to at least 3.9.0.
+If your's have an older version, it would be better to update your Python to at least 3.9.0.
 
 ## Create the project structure
 
@@ -90,19 +90,19 @@ Let's get our hands dirty and start coding it.
 
 To make sure we have all our dependencies for our project and not pollute the global scope, we will need to create a virtual environment for our script.
 
-Navigate inside your main foot folder, in my case it's `/football_updates` and run this:
+Navigate inside your main foot folder (in my case it's `/football_updates`) and run this:
 
 ```bash
 python3 -m venv virtualenv
 ```
-This will create a virtual env in a folder called `virtualenv`. Of course you cna change this by providing a different last param to the command above.
+This will create a virtual env in a folder called `virtualenv`. Of course, you can change this by providing a different last param to the command above.
 
 Now let's install our dependencies.
 
 We will need:
 
 - crontab // for interacting with crontab and making our lives a bit easier when installing the script
-- notifypy // fot triggering linux gnome notifications
+- notifypy // for triggering linux notifications
 - requests
 - python-dotenv // for managing the envs
 
@@ -121,7 +121,7 @@ This will mostly work for Linux and the Gnome distribution but there are some ot
 - post an update on Twitter
 - send an email or SMS
 
-For simplicity I will just trigger the updates as a desktop notification.
+For simplicity, I will trigger the updates as a desktop notification.
 
 Navigate to the `/src` folder and create a file called `notify.py` that should look like this:
 
@@ -158,13 +158,13 @@ You can simply run:
 ```bash
 python3 ./src/notify.py
 ```
-But you would get an error complaining that the notifypy module cannot be found in our dependencies. We were so close ...
+But you would get an error complaining that the notifypy module cannot be found in our dependencies. We were so close...
 
 But don't worry, this is expected.
 
-The issue is that we are trying to call our script using the default local python interpreter who doesn't know about our virtual environment dependencies and modules.
+The issue is that we are trying to call our script using the default local python interpreter. But it doesn't know about our virtual environment dependencies and modules.
 
-To make this work we need to use the interpreter from the virtual env.
+To make this work, we need to use the interpreter from the virtual env.
 
 Let's create a simple `execute.sh` script in our root folder that will allow us to call any script with the virtual env interpreter.
 
@@ -178,9 +178,9 @@ eval "./virtualenv/bin/python3 src/${1}.py ${@:2}"
 ```
 Notice the path we are using to call our Python interpreter `./virtualenv/bin/python3`. This is the one from the virtual env.
 
-Next we pass our file and the rest of the terminal arguments, but omitting the name of the file.
+Next, we pass our file and the rest of the terminal arguments but omit the name of the file.
 
-To test our notify script, we need to make our `execute.sh` script exectable by doing:
+To test our notify script, we need to make our `execute.sh` script executable by doing:
 
 ```bash
 chmod +x ./execute.sh
@@ -195,13 +195,15 @@ Did you get the notification? You should now see the popup.
 
 Don't forget to add the `./assets/alarm.wav` and `./assets/icon.png` to make it look and sound like a real notification.
 
-This step is done, let's move to the next one.
+This step is completed, so let's move to the next one.
 
 ## Store the last request timestamp
 
-If we use the default endpoint `/matches`, this will return all the live scores in real time.
+If we use the default endpoint `/matches`, this will return all the live scores in real-time.
 
-But we won't know which one was updated from our last request. If you build a website where the live scores are displayed, this will not be an issue, but for this project we just want to get the matches that changed betwen our requests.
+But we won't know which one was updated from our last request. If you build a website where the live scores are displayed, this will not be an issue. 
+
+But for this project, we just want to get the matches that changed between our requests.
 
 To do this, we will call `/matches/updates` and will provide the `last_update` query param that contains the timestamp of the last request.
 
@@ -321,15 +323,17 @@ You can now test the above by running:
 ./execute.sh poll
 ```
 
-You may get none, one or many notifications based on your current date and time, or if there is any match in progress.
+You may get none, one, or many notifications based on your current date and time. It all depends if there is any match in progress.
 
-It's also up to the players to score a goal in the same time that you are testing this, so not much you can do from your side at this point...
+It's also up to the players to score a goal in the same time that you are testing this. 
+
+Not much you can do about this...
 
 Let's move to the next step and add the poll script to our crontab.
 
-## Make our script easier to install on local laptop
+## Make our script easier to install on your laptop
 
-To make our lives easier, let's just encapsulate the logic of installing and removing the script in one single file.
+To make our lives easier, let's encapsulate the logic of installing and removing the script in one single file.
 
 Just create a `./src/install.py` and add this to it:
 
@@ -411,8 +415,8 @@ To easily remove it and stop the updates, just call:
 ./execute.sh install -u
 ```
 
-Now all you need to do is wait for somebody to score a goal and you will get a notification with the live score update.
+Now all you need to do is wait for somebody to score a goal, and you will get a notification with the live score update.
 
-If you want more informations or just read the docs for the [Football Live Scores API](https://bit.ly/3oEBIyl) on RapidAPI just [click here](https://bit.ly/3oEBIyl).
+If you want more information or just read the docs for the [Football Live Scores API](https://bit.ly/3oEBIyl) on RapidAPI just [click here](https://bit.ly/3oEBIyl).
 
 If you want to see the full code, just download it from my Github repo: [MihaiBlebea/football_updates](https://github.com/MihaiBlebea/football_updates)
